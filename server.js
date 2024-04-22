@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import sensorRoute from "./api/routes/sensor.js";
-// import bcrypt from 'bcryptjs';
+
 const app = express();
 
 const connect = async () =>{

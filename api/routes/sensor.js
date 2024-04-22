@@ -1,5 +1,5 @@
 import express from "express";
-import { userData, userRegister,InsertData,getSensor,getallSensor,getNano,getNanoGraph,getLast,insertBtnData, getReportSensor} from "../controllers/sensor.js";
+import { userData, userRegister,InsertData,getSensor,getallSensor,getNano,getNanoGraph,getLast,insertBtnData, getReportSensor, getSensorTime} from "../controllers/sensor.js";
 
 const router = express.Router();
 
@@ -14,6 +14,9 @@ router.get('/InsertData',InsertData);
 router.get('/getsensor', getSensor);
 
 router.get('/getallsensor', getallSensor);
+
+//get time based
+router.get('/gettimedata', getSensorTime);
 
 router.get('/getReportsensor', getReportSensor);
 

@@ -91,6 +91,33 @@ export const getallSensor = async(req,res)=>{
     }
 };
 
+//get all time
+export const getSensorTime = async(req,res)=>{
+  const {startDate,endDate} = req.query;
+  if (!startDate || !endDate) {
+    return res.status(400).json({ error: 'startDate and endDate are required' });
+  }
+  let isoFormatStartDate, isoFormatEndDate;
+  try {
+    isoFormatStartDate = new Date(startDate).toISOString();
+    isoFormatEndDate = new Date(endDate).toISOString();
+    console.log(isoFormatStartDate);
+    console.log(isoFormatEndDate);
+  } catch (error) {
+    return res.status(400).json({ error: 'Invalid startDate or endDate format' });
+  }
+  // const startDatetest = '2024-02-13T00:00:00Z';
+  // const endDatetest = '2024-04-06T23:59:59Z';
+  try {
+      const getsensor= await Data.find({
+        updatedAt: {$gte: isoFormatStartDate, $lte: isoFormatEndDate}
+      }).sort({updatedAt:-1});
+      res.status(200).json(getsensor);
+  } catch (error) {
+      res.status(500).json(error);
+  }
+};
+
 export const getReportSensor = async(req,res)=>{
   try {
       const getsensor= await Data.find().sort({updatedAt:-1});
@@ -104,7 +131,6 @@ export const getReportSensor = async(req,res)=>{
 export const getLast = async (req, res) => {
     let {select} = req.query;
     try {
-      // Use the appropriate model name if "Data" is not the correct model name
       const getLast5SensorData = await Data.find({}, { vibration: 1, updatedAt: 1, _id: 0 })
         .sort({ updatedAt: -1 })
         .limit(15);
@@ -113,7 +139,6 @@ export const getLast = async (req, res) => {
         vibration: doc.vibration,
         updatedAt: doc.updatedAt
       }));
-  
       res.status(200).json(sensorDataWithTimestamp);
     } catch (error) {
       res.status(500).json(error);
